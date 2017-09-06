@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import * as timePickerActions from '../actions/TimePickerActions'
+import * as timePickerActions from '../reducers/time-picker'
 
 // components
 import TimePicker from '../components/TimePicker';
@@ -29,13 +29,14 @@ class App extends Component {
   render() {
     console.log(this.props);
 
-    const { timePickers } = this.props;
+    const { workPicker, breakPicker } = this.props.timePickers;
     const { changeTime } = this.props.timePickerActions;
 
     return (
       <div className="App">
         Holla
-        <TimePicker value={timePickers.breakPicker.value} changeTime={changeTime} id={"breakPicker"} />
+        <TimePicker value={breakPicker.value} changeTime={changeTime} id={"breakPicker"} />
+        <TimePicker value={workPicker.value} changeTime={changeTime} id={"workPicker"} />
       </div>
     );
   }

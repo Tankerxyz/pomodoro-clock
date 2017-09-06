@@ -1,13 +1,26 @@
-import { VALUE_UPDATED } from '../constants/TimePicker';
+import { createAction, createReducer } from 'redux-act';
 
-export default function timePickerReducer(timePicker, action) {
-  switch (action.type) {
-    case VALUE_UPDATED:
-      return {
-        ...timePicker,
-        value: action.payload
-      };
-    default:
-      return timePicker;
+const initialState = {
+  breakPicker: {
+    value: 5
+  },
+  workPicker: {
+    value: 25
   }
-}
+};
+
+export const changeTime = createAction('change time', (id, value) => ({ id, value }));
+
+export default createReducer({
+  [changeTime]: (state, { id, value }) => {
+    if (!state[id]) { return state; }
+
+    return {
+      ...state,
+      [id]: {
+        ...state[id],
+        value
+      }
+    }
+  }
+}, initialState);
