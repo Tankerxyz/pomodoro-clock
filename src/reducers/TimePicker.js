@@ -1,15 +1,16 @@
-import { createAction, createReducer } from 'redux-act';
+import { createReducer } from 'redux-act';
+import { changeTime } from '../actions/TimePicker';
 
 const initialState = {
-  breakPicker: {
-    value: 5
-  },
   workPicker: {
-    value: 25
+    value: 1,
+    label: "Work time"
+  },
+  breakPicker: {
+    value: 1,
+    label: "Break time"
   }
 };
-
-export const changeTime = createAction('change time', (id, value) => ({ id, value }));
 
 export default createReducer({
   [changeTime]: (state, { id, value }) => {

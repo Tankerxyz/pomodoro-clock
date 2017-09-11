@@ -1,0 +1,18 @@
+.tomato {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  border: 1px dashed lightgreen;
+  background: url('../assets/img/Tomato.png') no-repeat 50% 50%;
+  background-size: 400px;
+  height: 350px;
+
+  .time {
+    display: inline;
+    color: white;
+    font-size: 85px;
+    border: 1px dashed lightblue;
+    transform: rotate(-30deg)
+  }
+}

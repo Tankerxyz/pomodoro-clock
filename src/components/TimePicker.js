@@ -7,6 +7,7 @@ class TimePicker extends Component {
   static propTypes = {
     value: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
+    label: PropTypes.string,
     minValue: PropTypes.number,
     maxValue: PropTypes.number,
     changeTime: PropTypes.func
@@ -14,7 +15,7 @@ class TimePicker extends Component {
 
   static defaultProps = {
     value: 0,
-    minValue: 0,
+    minValue: 1,
     maxValue: 60
   };
 
@@ -41,7 +42,7 @@ class TimePicker extends Component {
     });
 
     this.debounce(() => {
-      if(this.state.mouseDown) {
+      if (this.state.mouseDown) {
         this.incrementValue();
       }
     }, 100);
@@ -57,7 +58,7 @@ class TimePicker extends Component {
     });
 
     this.debounce(() => {
-      if(this.state.mouseDown) {
+      if (this.state.mouseDown) {
         this.decrementValue();
       }
     }, 100);
@@ -73,15 +74,18 @@ class TimePicker extends Component {
   render() {
     return (
       <div className="time-picker">
-        <div className="button increment" onMouseDown={this.incrementValue} onMouseUp={this.onMouseUp}>
-          <span className="label">+</span>
-        </div>
+        <div className="controls-wrapper">
+          <div className="button increment" onMouseDown={this.incrementValue} onMouseUp={this.onMouseUp}>
+            <span className="label">+</span>
+          </div>
 
           {this.props.value}
 
-        <div className="button decrement" onMouseDown={this.decrementValue} onMouseUp={this.onMouseUp}>
-          <span className="label">-</span>
+          <div className="button decrement" onMouseDown={this.decrementValue} onMouseUp={this.onMouseUp}>
+            <span className="label">-</span>
+          </div>
         </div>
+        <div className="picker-label">{this.props.label}</div>
       </div>
     );
   }

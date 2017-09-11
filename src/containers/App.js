@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import * as timePickerActions from '../reducers/time-picker'
+import * as timePickerActions from '../actions/TimePicker'
+import * as tomatoActions from '../actions/Tomato'
 
 // components
 import TimePicker from '../components/TimePicker';
@@ -14,29 +15,58 @@ import '../styles/App.scss';
 
 function mapStateToProps(state) {
   return {
-    timePickers: state.timePickers
+    timePickers: state.timePickers,
+    tomato: state.tomato
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    timePickerActions: bindActionCreators(timePickerActions, dispatch)
+    timePickerActions: bindActionCreators(timePickerActions, dispatch),
+    tomatoActions: bindActionCreators(tomatoActions, dispatch)
   }
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
 class App extends Component {
-  render() {
-    console.log(this.props);
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      alarmSound: new Audio('/sound/end-tomato-alarm.mp3')
+    }
+  }
+
+  onStartTomato = () => {
+    this.props.tomatoActions.startTomato(this.props.timePickers);
+  }
+
+  onEndTomato = () => {
+    this.state.alarmSound.play();
+    setTimeout(this.onStartTomato, 0);
+  }
+
+  onChangeWorkPicker = (id, newValue) => {
+    this.props.timePickerActions.changeTime(id, newValue);
+    if (!this.props.tomato.started) {
+      this.props.tomatoActions.updateTomatoTimeString(newValue)
+    }
+  }
+
+  render() {
     const { workPicker, breakPicker } = this.props.timePickers;
     const { changeTime } = this.props.timePickerActions;
+    const { startTomato, updateTomato, updateTomatoTimeString } = this.props.tomatoActions;
+    const { started, timeString } = this.props.tomato;
 
     return (
-      <div className="App">
-        Holla
-        <TimePicker value={breakPicker.value} changeTime={changeTime} id={"breakPicker"} />
-        <TimePicker value={workPicker.value} changeTime={changeTime} id={"workPicker"} />
+      <div className="app">
+        <div className="controls-container">
+          <TimePicker label={breakPicker.label} value={breakPicker.value} changeTime={changeTime} id={"breakPicker"} minValue={5} maxValue={30} />
+          <StartButton started={started} start={this.onStartTomato} />
+          <TimePicker label={workPicker.label} value={workPicker.value} changeTime={this.onChangeWorkPicker} id={"workPicker"} />
+        </div>
+        <Tomato started={started} timeString={timeString} updateTomato={updateTomato} onEnd={this.onEndTomato} />
       </div>
     );
   }

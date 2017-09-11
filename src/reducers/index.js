@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import timePickersReducer from './time-picker';
+import timePickerReducer from './TimePicker';
+import tomatoReducer from './Tomato';
 
 export default combineReducers({
-  timePickers: timePickersReducer
+  timePickers: timePickerReducer,
+  tomato: tomatoReducer
 });

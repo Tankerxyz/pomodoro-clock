@@ -1,0 +1,16 @@
+.start-button {
+
+  transition: all 5s ease-in-out;
+  width: 0px;
+  height: 0px;
+
+  .stop {
+    border: 50px solid white;
+  }
+
+  .start {
+    border: 50px solid transparent;
+    border-left: 100px solid white;
+    border-right: none;
+  }
+}

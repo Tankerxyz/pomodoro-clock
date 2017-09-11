@@ -1,3 +1,16 @@
-.App {
-  
+.app {
+  display: flex;
+  border: 1px dashed lightcoral;
+  flex-flow: column;
+  align-items: center;
+
+  .controls-container {
+    display: flex;
+    width: 66%;
+    justify-content: space-around;
+
+    border: 1px dashed #ccc;
+
+  }
+
 }

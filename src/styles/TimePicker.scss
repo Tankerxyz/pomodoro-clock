@@ -1,51 +1,64 @@
-$primary: #9BC53D;
+@import "./utils/vars";
 
 .time-picker {
   font-size: 3em;
   text-align: center;
-  overflow: hidden;
   user-select: none;
   cursor: default;
   color: white;
   text-shadow: 1px 1px rgba(0, 0, 0, 0.3);
 
-  background-color: $primary;
-  width: 170px;
+  .controls-wrapper {
+    overflow: hidden;
 
-  box-shadow: 0px 1px 10px 3px rgba(0, 0, 0, 0.2),
-              1px 3px 5px 1px rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
+    background-color: $primary-picker-background-collor;
+    width: 170px;
 
-  .button {
-    background-color: lighten($primary, 10%);
-    box-shadow: 0px 1px 1px 2px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
+    box-shadow: 0px 1px 10px 3px rgba(0, 0, 0, 0.2),
+                1px 3px 5px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
 
-    .label {
-      position: relative;
-    }
+    .button {
+      background-color: lighten($primary-picker-background-collor, 10%);
+      box-shadow: 0px 1px 1px 2px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
 
-    &.increment {
-      box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.1);
-    }
-
-    &:hover {
-      background-color: darken($primary, 5%);
-    }
-    &:active {
-      background-color: darken($primary, 10%);
+      .label {
+        position: relative;
+      }
 
       &.increment {
-        .label {
-          top: 1px;
-        }
+        box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.1);
       }
 
-      &.decrement {
-        .label {
-          top: -1px;
+      &:hover {
+        background-color: darken($primary-picker-background-collor, 5%);
+      }
+      &:active {
+        background-color: darken($primary-picker-background-collor, 10%);
+
+        &.increment {
+          .label {
+            top: 1px;
+          }
+        }
+
+        &.decrement {
+          .label {
+            top: -1px;
+          }
         }
       }
     }
+  }
+
+  .picker-label {
+    margin-top: 10px;
+    font-size: 0.6em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: rgba(46, 175, 229, 0.50);
+    text-shadow: 1px 4px 6px $primary-background-color, 0 0 0 #000, 1px 4px 6px $primary-background-color;
   }
 }
