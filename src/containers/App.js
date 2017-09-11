@@ -33,11 +33,21 @@ class App extends Component {
     super(props);
 
     this.state = {
-      alarmSound: new Audio('/sound/end-tomato-alarm.mp3')
+      alarmSound: new Audio('/sound/end-tomato-alarm.mp3'),
+      cyrcleSound: new Audio('/sound/cyrcle.mp3')
     }
   }
 
+  playCyrcleSound = () => {
+    this.state.cyrcleSound.play();
+  }
+
   onStartTomato = () => {
+    this.playCyrcleSound();
+    this.props.tomatoActions.startTomato(this.props.timePickers);
+  }
+
+  onStopTomato = () => {
     this.props.tomatoActions.startTomato(this.props.timePickers);
   }
 
@@ -53,6 +63,10 @@ class App extends Component {
     }
   }
 
+  onUpdateTomato = () => {
+    this.props.tomatoActions.updateTomato(this.onEndTomato.bind(this), this.playCyrcleSound.bind(this));
+  }
+
   render() {
     const { workPicker, breakPicker } = this.props.timePickers;
     const { changeTime } = this.props.timePickerActions;
@@ -63,10 +77,10 @@ class App extends Component {
       <div className="app">
         <div className="controls-container">
           <TimePicker label={breakPicker.label} value={breakPicker.value} changeTime={changeTime} id={"breakPicker"} minValue={5} maxValue={30} />
-          <StartButton started={started} start={this.onStartTomato} />
+          <StartButton started={started} start={this.onStartTomato} stop={this.onStopTomato} />
           <TimePicker label={workPicker.label} value={workPicker.value} changeTime={this.onChangeWorkPicker} id={"workPicker"} />
         </div>
-        <Tomato started={started} timeString={timeString} updateTomato={updateTomato} onEnd={this.onEndTomato} />
+        <Tomato started={started} timeString={timeString} updateTomato={this.onUpdateTomato.bind(this)} onEnd={this.onEndTomato} />
       </div>
     );
   }

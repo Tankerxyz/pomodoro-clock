@@ -1,16 +1,30 @@
+@import 'utils/vars.scss';
+
+$button-color: darken($primary-background-color, 50%);
+
 .start-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  cursor: pointer;
 
-  transition: all 5s ease-in-out;
-  width: 0px;
-  height: 0px;
+  
+  width: 100px;
+  height: 100px;
 
-  .stop {
-    border: 50px solid white;
+  color: $button-color;
+
+  .fa {
+    transition: all 0.2s ease-in-out;
+    font-size: 100px;
+
+    color: rgba($button-color, 0.2);
+    text-shadow: 1px 4px 6px $primary-background-color, 0 0 0 #000, 1px 4px 6px $primary-background-color;
+
+    &:hover {
+      color: rgba($button-color, 0.1);
+    }
   }
 
-  .start {
-    border: 50px solid transparent;
-    border-left: 100px solid white;
-    border-right: none;
-  }
 }

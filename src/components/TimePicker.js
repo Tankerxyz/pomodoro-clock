@@ -45,7 +45,7 @@ class TimePicker extends Component {
       if (this.state.mouseDown) {
         this.incrementValue();
       }
-    }, 100);
+    }, 150);
   }
 
   decrementValue = () => {
@@ -61,7 +61,7 @@ class TimePicker extends Component {
       if (this.state.mouseDown) {
         this.decrementValue();
       }
-    }, 100);
+    }, 150);
   }
 
   onMouseUp = () => {

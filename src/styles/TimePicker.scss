@@ -14,13 +14,13 @@
     background-color: $primary-picker-background-collor;
     width: 170px;
 
-    box-shadow: 0px 1px 10px 3px rgba(0, 0, 0, 0.2),
-                1px 3px 5px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 1px 10px 3px rgba(0, 0, 0, 0.2) inset,
+                1px 3px 5px 1px rgba(0, 0, 0, 0.1) inset;
     border-radius: 50%;
 
     .button {
       background-color: lighten($primary-picker-background-collor, 10%);
-      box-shadow: 0px 1px 1px 2px rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 1px 1px 2px rgba(0, 0, 0, 0.2);
       cursor: pointer;
 
       .label {
@@ -28,7 +28,7 @@
       }
 
       &.increment {
-        box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.3);
       }
 
       &:hover {
@@ -38,6 +38,7 @@
         background-color: darken($primary-picker-background-collor, 10%);
 
         &.increment {
+          box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.4);
           .label {
             top: 1px;
           }
@@ -59,6 +60,6 @@
     font-weight: bold;
     text-transform: uppercase;
     color: rgba(46, 175, 229, 0.50);
-    text-shadow: 1px 4px 6px $primary-background-color, 0 0 0 #000, 1px 4px 6px $primary-background-color;
+    text-shadow: 1px 3px 5px $primary-background-color, 0 0 0 #000, 1px 3px 5px $primary-background-color;
   }
 }

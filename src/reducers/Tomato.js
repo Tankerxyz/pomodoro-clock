@@ -1,8 +1,8 @@
 import { createReducer } from 'redux-act';
-import { startTomato, updateTomato, updateTomatoTimeString } from '../actions/Tomato';
+import { startTomato, stopTomato, updateTomato, updateTomatoTimeString } from '../actions/Tomato';
 
 const initialState = {
-  activeTimer: 0,
+  activeTimerIndex: 0,
   timeString: '25:00',
   started: false
 };
@@ -30,7 +30,7 @@ export default createReducer({
       ...state,
       timeString: getTimeString(activeTimer.time),
       timers: newTimers,
-      activeTimer: 0,
+      activeTimerIndex: 0,
       started: !state.started
     }
   },
@@ -40,10 +40,10 @@ export default createReducer({
       timeString: getTimeString(mins * 60)
     }
   },
-  [updateTomato]: (state, onEnd) => {
+  [updateTomato]: (state, { onEnd, onEndCycle }) => {
 
-    let activeTimer = state.activeTimer;
-    const currentTimer = state.timers[activeTimer];
+    let activeTimerIndex = state.activeTimerIndex;
+    const currentTimer = state.timers[activeTimerIndex];
     const currentTime = currentTimer.time - 1;
 
     const newTimer = {
@@ -54,20 +54,22 @@ export default createReducer({
     const newTimers = [
       ...state.timers
     ];
-    newTimers[activeTimer] = newTimer;
+    newTimers[activeTimerIndex] = newTimer;
 
     // circling timer logic
     if (!currentTime) {
-      activeTimer = activeTimer + 1 < newTimers.length ? activeTimer + 1 : 0;
+      activeTimerIndex = activeTimerIndex + 1 < newTimers.length ? activeTimerIndex + 1 : 0;
 
-      if (!newTimers[activeTimer].time) {
+      if (!newTimers[activeTimerIndex].time) {
         onEnd()
+      } else {
+        onEndCycle();
       }
     }
 
     return {
       ...state,
-      activeTimer,
+      activeTimerIndex,
       timers: newTimers,
       timeString: getTimeString(currentTime),
     }
