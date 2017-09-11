@@ -3,12 +3,16 @@ import { changeTime } from '../actions/TimePicker';
 
 const initialState = {
   workPicker: {
-    value: 3,
-    label: "Work time"
+    id: "workPicker",
+    value: 6,
+    label: "Work time",
+    timerProcessInfoLabel: "Work"
   },
   breakPicker: {
-    value: 3,
-    label: "Break time"
+    id: "breakPicker",
+    value: 6,
+    label: "Break time",
+    timerProcessInfoLabel: "Break"
   }
 };
 

@@ -7,8 +7,7 @@ import 'font-awesome/css/font-awesome.min.css';
 
 import App from './containers/App';
 import registerServiceWorker from './registerServiceWorker';
-import configureStore from './store/configureStore'
-
+import configureStore from './store/configureStore';
 
 const store = configureStore();
 

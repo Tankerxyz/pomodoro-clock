@@ -1,10 +1,12 @@
 import { createReducer } from 'redux-act';
-import { startTomato, stopTomato, updateTomato, updateTomatoTimeString } from '../actions/Tomato';
+import { setTomato, updateTomato, updateTomatoTimeString } from '../actions/Tomato';
 
 const initialState = {
   activeTimerIndex: 0,
-  timeString: '25:00',
-  started: false
+  timeString: '',
+  started: false,
+  timers: [],
+  currentTimeInfoLabel: ""
 };
 
 function getTimeString(time) {
@@ -14,13 +16,14 @@ function getTimeString(time) {
 }
 
 export default createReducer({
-  [startTomato]: (state, timers) => {
+  [setTomato]: (state, { timers, started }) => {
 
     let newTimers = [];
     for (let key in timers) {
       newTimers.push({
         id: key,
-        time: timers[key].value * 60
+        time: timers[key].value * 60,
+        timerProcessInfoLabel: timers[key].timerProcessInfoLabel
       });
     }
 
@@ -31,15 +34,17 @@ export default createReducer({
       timeString: getTimeString(activeTimer.time),
       timers: newTimers,
       activeTimerIndex: 0,
-      started: !state.started
+      started: started
     }
   },
+
   [updateTomatoTimeString]: (state, mins) => {
     return {
       ...state,
       timeString: getTimeString(mins * 60)
     }
   },
+
   [updateTomato]: (state, { onEnd, onEndCycle }) => {
 
     let activeTimerIndex = state.activeTimerIndex;
@@ -61,9 +66,9 @@ export default createReducer({
       activeTimerIndex = activeTimerIndex + 1 < newTimers.length ? activeTimerIndex + 1 : 0;
 
       if (!newTimers[activeTimerIndex].time) {
-        onEnd()
+        onEnd();
       } else {
-        onEndCycle();
+        onEndCycle(newTimer);
       }
     }
 
@@ -72,6 +77,7 @@ export default createReducer({
       activeTimerIndex,
       timers: newTimers,
       timeString: getTimeString(currentTime),
+      currentTimeInfoLabel: newTimers[activeTimerIndex].timerProcessInfoLabel
     }
   }
 }, initialState)

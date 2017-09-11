@@ -28,10 +28,6 @@ class TimePicker extends Component {
     }
   }
 
-  debounce = (fn, time) => {
-    setTimeout(fn, time);
-  }
-
   incrementValue = () => {
     if (this.props.value >= this.props.maxValue) { return; }
 
@@ -41,7 +37,7 @@ class TimePicker extends Component {
       mouseDown: true
     });
 
-    this.debounce(() => {
+    setTimeout(() => {
       if (this.state.mouseDown) {
         this.incrementValue();
       }
@@ -57,7 +53,7 @@ class TimePicker extends Component {
       mouseDown: true
     });
 
-    this.debounce(() => {
+    setTimeout(() => {
       if (this.state.mouseDown) {
         this.decrementValue();
       }
@@ -67,7 +63,7 @@ class TimePicker extends Component {
   onMouseUp = () => {
     this.setState({
       mouseDown: false
-    })
+    });
   }
 
 

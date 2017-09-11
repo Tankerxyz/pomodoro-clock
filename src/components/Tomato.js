@@ -8,16 +8,15 @@ class Tomato extends Component {
     this.state = {
       h_timer: null
     }
-
   }
 
-  startTimer() {
+  startTimer = () => {
     this.setState({
       h_timer: setInterval(this.props.updateTomato, 10)
-    })
+    });
   }
 
-  stopTimer() {
+  stopTimer = () => {
     clearInterval(this.state.h_timer);
   }
 
@@ -34,7 +33,7 @@ class Tomato extends Component {
       <div className="tomato">
         <div className="status">
           {
-
+            this.props.started ? this.props.label : null
           }
         </div>
         <div className="time">

@@ -34,26 +34,49 @@ class App extends Component {
 
     this.state = {
       alarmSound: new Audio('/sound/end-tomato-alarm.mp3'),
-      cyrcleSound: new Audio('/sound/cyrcle.mp3')
+      cycleSound: new Audio('/sound/cycle.mp3'),
+      isEnabledNotification: false
+    };
+
+    if (window.Notification) {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          this.setState({
+            isEnabledNotification: true
+          })
+        }
+      })
+    }
+
+    this.initTomato();
+  }
+
+  initTomato = (enabledNotification) => {
+    this.props.tomatoActions.setTomato(this.props.timePickers, false, enabledNotification);
+  }
+
+  onEndCycle = (endedTimerLabel) => {
+    this.state.cycleSound.play();
+    if (this.state.isEnabledNotification) {
+      new Notification(`${this.props.tomato.currentTimeInfoLabel} was ended`);
     }
   }
 
-  playCyrcleSound = () => {
-    this.state.cyrcleSound.play();
-  }
-
   onStartTomato = () => {
-    this.playCyrcleSound();
-    this.props.tomatoActions.startTomato(this.props.timePickers);
+    this.state.cycleSound.play();;
+    this.props.tomatoActions.setTomato(this.props.timePickers, true);
   }
 
   onStopTomato = () => {
-    this.props.tomatoActions.startTomato(this.props.timePickers);
+    this.props.tomatoActions.setTomato(this.props.timePickers, false);
+    if (this.state.isEnabledNotification) {
+      new Notification(`Tomato was ended`);
+    }
   }
 
   onEndTomato = () => {
     this.state.alarmSound.play();
-    setTimeout(this.onStartTomato, 0);
+    setTimeout(this.onStopTomato, 0);
   }
 
   onChangeWorkPicker = (id, newValue) => {
@@ -64,23 +87,23 @@ class App extends Component {
   }
 
   onUpdateTomato = () => {
-    this.props.tomatoActions.updateTomato(this.onEndTomato.bind(this), this.playCyrcleSound.bind(this));
+    this.props.tomatoActions.updateTomato(this.onEndTomato.bind(this), this.onEndCycle.bind(this));
   }
 
   render() {
     const { workPicker, breakPicker } = this.props.timePickers;
     const { changeTime } = this.props.timePickerActions;
     const { startTomato, updateTomato, updateTomatoTimeString } = this.props.tomatoActions;
-    const { started, timeString } = this.props.tomato;
+    const { started, timeString, currentTimeInfoLabel } = this.props.tomato;
 
     return (
       <div className="app">
         <div className="controls-container">
           <TimePicker label={breakPicker.label} value={breakPicker.value} changeTime={changeTime} id={"breakPicker"} minValue={5} maxValue={30} />
           <StartButton started={started} start={this.onStartTomato} stop={this.onStopTomato} />
-          <TimePicker label={workPicker.label} value={workPicker.value} changeTime={this.onChangeWorkPicker} id={"workPicker"} />
+          <TimePicker label={workPicker.label} value={workPicker.value} changeTime={this.onChangeWorkPicker} id={"workPicker"} minValue={5} />
         </div>
-        <Tomato started={started} timeString={timeString} updateTomato={this.onUpdateTomato.bind(this)} onEnd={this.onEndTomato} />
+        <Tomato started={started} label={currentTimeInfoLabel} timeString={timeString} updateTomato={this.onUpdateTomato.bind(this)} />
       </div>
     );
   }
