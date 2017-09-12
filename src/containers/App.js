@@ -48,11 +48,13 @@ class App extends Component {
       })
     }
 
-    this.initTomato();
+    if (!this.props.tomato.timeString) {
+      this.initTomato();
+    }
   }
 
-  initTomato = (enabledNotification) => {
-    this.props.tomatoActions.setTomato(this.props.timePickers, false, enabledNotification);
+  initTomato = () => {
+    this.props.tomatoActions.setTomato(this.props.timePickers, false);
   }
 
   onEndCycle = (endedTimerLabel) => {
@@ -63,7 +65,7 @@ class App extends Component {
   }
 
   onStartTomato = () => {
-    this.state.cycleSound.play();;
+    this.state.cycleSound.play();
     this.props.tomatoActions.setTomato(this.props.timePickers, true);
   }
 
@@ -94,7 +96,7 @@ class App extends Component {
     const { workPicker, breakPicker } = this.props.timePickers;
     const { changeTime } = this.props.timePickerActions;
     const { startTomato, updateTomato, updateTomatoTimeString } = this.props.tomatoActions;
-    const { started, timeString, currentTimeInfoLabel } = this.props.tomato;
+    const { started, time, timeString, currentTimeInfoLabel, passedTime } = this.props.tomato;
 
     return (
       <div className="app">
@@ -103,7 +105,13 @@ class App extends Component {
           <StartButton started={started} start={this.onStartTomato} stop={this.onStopTomato} />
           <TimePicker label={workPicker.label} value={workPicker.value} changeTime={this.onChangeWorkPicker} id={"workPicker"} minValue={5} />
         </div>
-        <Tomato started={started} label={currentTimeInfoLabel} timeString={timeString} updateTomato={this.onUpdateTomato.bind(this)} />
+        <Tomato
+          passedTime={passedTime}
+          started={started}
+          label={currentTimeInfoLabel}
+          time={time}
+          timeString={timeString}
+          updateTomato={this.onUpdateTomato.bind(this)} />
       </div>
     );
   }

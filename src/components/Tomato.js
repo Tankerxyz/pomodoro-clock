@@ -8,6 +8,10 @@ class Tomato extends Component {
     this.state = {
       h_timer: null
     }
+
+    if (this.props.started) {
+      setTimeout(this.startTimer.bind(this), 0)
+    }
   }
 
   startTimer = () => {
@@ -34,6 +38,16 @@ class Tomato extends Component {
         <div className="status">
           {
             this.props.started ? this.props.label : null
+          }
+        </div>
+        <div>
+          {
+            this.props.passedTime
+          }
+        </div>
+        <div>
+          {
+            " time: " + this.props.time
           }
         </div>
         <div className="time">

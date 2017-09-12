@@ -6,7 +6,9 @@ const initialState = {
   timeString: '',
   started: false,
   timers: [],
-  currentTimeInfoLabel: ""
+  currentTimeInfoLabel: "",
+  passedTime: 0,
+  time: 0
 };
 
 function getTimeString(time) {
@@ -16,7 +18,7 @@ function getTimeString(time) {
 }
 
 export default createReducer({
-  [setTomato]: (state, { timers, started }) => {
+  [setTomato]: (state, { timers, started, startTime }) => {
 
     let newTimers = [];
     for (let key in timers) {
@@ -34,7 +36,8 @@ export default createReducer({
       timeString: getTimeString(activeTimer.time),
       timers: newTimers,
       activeTimerIndex: 0,
-      started: started
+      started,
+      startTime: Date.now()
     }
   },
 
@@ -48,12 +51,19 @@ export default createReducer({
   [updateTomato]: (state, { onEnd, onEndCycle }) => {
 
     let activeTimerIndex = state.activeTimerIndex;
+
+    let alreadyPassedTime = 0;
+    for (let i = 0; i < activeTimerIndex; ++i) {
+      alreadyPassedTime += state.timers[i].time;
+    }
+
     const currentTimer = state.timers[activeTimerIndex];
-    const currentTime = currentTimer.time - 1;
+    const passedTime = ~~((Date.now() - state.startTime) / 10);
+    const currentTime = currentTimer.time - (passedTime - alreadyPassedTime);
 
     const newTimer = {
       ...currentTimer,
-      time: currentTime
+      time: currentTimer.time
     };
 
     const newTimers = [
@@ -62,10 +72,11 @@ export default createReducer({
     newTimers[activeTimerIndex] = newTimer;
 
     // circling timer logic
-    if (!currentTime) {
+    if (currentTime <= 0) {
+      const allPassedTime = newTimers.reduce((sum, cur) => sum + cur.time, 0);
       activeTimerIndex = activeTimerIndex + 1 < newTimers.length ? activeTimerIndex + 1 : 0;
 
-      if (!newTimers[activeTimerIndex].time) {
+      if ((allPassedTime - passedTime) <= 0) {
         onEnd();
       } else {
         onEndCycle(newTimer);
@@ -77,7 +88,9 @@ export default createReducer({
       activeTimerIndex,
       timers: newTimers,
       timeString: getTimeString(currentTime),
-      currentTimeInfoLabel: newTimers[activeTimerIndex].timerProcessInfoLabel
+      time: currentTime,
+      currentTimeInfoLabel: newTimers[activeTimerIndex].timerProcessInfoLabel,
+      passedTime
     }
   }
 }, initialState)
