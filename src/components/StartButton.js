@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import '../styles/StartButton.scss';
 
 class StartButton extends Component {
-
   constructor(props) {
     super(props);
 

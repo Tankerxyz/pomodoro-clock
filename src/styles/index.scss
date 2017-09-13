@@ -6,3 +6,7 @@ body {
   font-family: Roboto, sans-serif;
   background-color: $primary-background-color;
 }
+
+*:focus {
+  outline: none;
+}

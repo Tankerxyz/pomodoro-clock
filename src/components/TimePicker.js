@@ -1,90 +1,53 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import '../styles/TimePicker.scss';
 
-class TimePicker extends Component {
-  static propTypes = {
-    value: PropTypes.number.isRequired,
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string,
-    minValue: PropTypes.number,
-    maxValue: PropTypes.number,
-    changeTime: PropTypes.func
-  };
 
-  static defaultProps = {
-    value: 0,
-    minValue: 1,
-    maxValue: 60
-  };
+const TimePicker = (props) => {
+  const incrementValue = () => {
+    if (props.value >= props.maxValue) { return; }
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      value: this.props.value,
-      mouseDown: false
-    }
+    props.changeTime(props.id, props.value + 1);
   }
 
-  incrementValue = () => {
-    if (this.props.value >= this.props.maxValue) { return; }
+  const decrementValue = () => {
+    if (props.value <= props.minValue) { return; }
 
-    this.props.changeTime(this.props.id, this.props.value + 1);
-
-    this.setState({
-      mouseDown: true
-    });
-
-    setTimeout(() => {
-      if (this.state.mouseDown) {
-        this.incrementValue();
-      }
-    }, 150);
+    props.changeTime(props.id, props.value - 1);
   }
 
-  decrementValue = () => {
-    if (this.props.value <= this.props.minValue) { return; }
-
-    this.props.changeTime(this.props.id, this.props.value - 1);
-
-    this.setState({
-      mouseDown: true
-    });
-
-    setTimeout(() => {
-      if (this.state.mouseDown) {
-        this.decrementValue();
-      }
-    }, 150);
-  }
-
-  onMouseUp = () => {
-    this.setState({
-      mouseDown: false
-    });
-  }
-
-
-  render() {
-    return (
-      <div className="time-picker">
-        <div className="controls-wrapper">
-          <div className="button increment" onMouseDown={this.incrementValue} onMouseUp={this.onMouseUp}>
-            <span className="label">+</span>
-          </div>
-
-          {this.props.value}
-
-          <div className="button decrement" onMouseDown={this.decrementValue} onMouseUp={this.onMouseUp}>
-            <span className="label">-</span>
-          </div>
+  return (
+    <div className="time-picker">
+      <div className="controls-wrapper">
+        <div className="button increment" onClick={incrementValue}>
+          <span className="label">+</span>
         </div>
-        <div className="picker-label">{this.props.label}</div>
+
+        <div className="value">{props.value}</div>
+
+        <div className="button decrement" onClick={decrementValue}>
+          <span className="label">-</span>
+        </div>
       </div>
-    );
-  }
-}
+      <div className="picker-label">{props.label}</div>
+    </div>
+  );
+};
+
+TimePicker.propTypes = {
+  value: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  minValue: PropTypes.number,
+  maxValue: PropTypes.number,
+  changeTime: PropTypes.func
+};
+
+TimePicker.defaultProps = {
+  value: 1,
+  minValue: 1,
+  maxValue: 60
+};
 
 export default TimePicker;

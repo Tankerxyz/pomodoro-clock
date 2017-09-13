@@ -1,16 +1,14 @@
 .app {
+  margin-top: 5vh;
   display: flex;
-  border: 1px dashed lightcoral;
   flex-flow: column;
   align-items: center;
 
   .controls-container {
     display: flex;
-    width: 66%;
+    width: 100vw;
+    max-width: 1000px;
     justify-content: space-around;
     align-items: center;
-    border: 1px dashed #ccc;
-
   }
-
 }

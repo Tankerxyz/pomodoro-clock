@@ -6,13 +6,15 @@ const initialState = {
     id: "workPicker",
     value: 6,
     label: "Work time",
-    timerProcessInfoLabel: "Work"
+    startColor: [0.56, 0.70, 0.31],
+    endColor: [0.94, 0.36, 0.25]
   },
   breakPicker: {
     id: "breakPicker",
     value: 6,
     label: "Break time",
-    timerProcessInfoLabel: "Break"
+    startColor: [0.94, 0.36, 0.25],
+    endColor: [0.56, 0.70, 0.31]
   }
 };
 

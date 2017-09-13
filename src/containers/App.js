@@ -13,6 +13,12 @@ import Tomato from '../components/Tomato';
 //styles
 import '../styles/App.scss';
 
+let prePath = '';
+
+if (process.env.NODE_ENV === 'production') {
+  prePath = 'https://raw.githubusercontent.com/Tankerxyz/pomodoro-clock/master/public/'
+}
+
 function mapStateToProps(state) {
   return {
     timePickers: state.timePickers,
@@ -33,8 +39,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      alarmSound: new Audio('/sound/end-tomato-alarm.mp3'),
-      cycleSound: new Audio('/sound/cycle.mp3'),
+      alarmSound: new Audio(prePath + '/sound/end-tomato-alarm.mp3'),
+      cycleSound: new Audio(prePath + '/sound/cycle.mp3'),
       isEnabledNotification: false
     };
 
@@ -48,7 +54,7 @@ class App extends Component {
       })
     }
 
-    if (!this.props.tomato.timeString) {
+    if (!this.props.tomato.initialisated) {
       this.initTomato();
     }
   }
@@ -57,11 +63,21 @@ class App extends Component {
     this.props.tomatoActions.setTomato(this.props.timePickers, false);
   }
 
+  showNotification(title) {
+    if (this.state.isEnabledNotification) {
+      try {
+        new Notification(title);
+      } catch (e) {
+        // some mobile devices not support notifiactions;
+      }
+    }
+  }
+
   onEndCycle = (endedTimerLabel) => {
     this.state.cycleSound.play();
-    if (this.state.isEnabledNotification) {
-      new Notification(`${this.props.tomato.currentTimeInfoLabel} was ended`);
-    }
+    const tomato = this.props.tomato;
+    const label = tomato.timers[tomato.activeTimerIndex].label
+    this.showNotification(`${label} was ended`);
   }
 
   onStartTomato = () => {
@@ -71,9 +87,7 @@ class App extends Component {
 
   onStopTomato = () => {
     this.props.tomatoActions.setTomato(this.props.timePickers, false);
-    if (this.state.isEnabledNotification) {
-      new Notification(`Tomato was ended`);
-    }
+    this.showNotification(`Tomato was ended`);
   }
 
   onEndTomato = () => {
@@ -84,7 +98,7 @@ class App extends Component {
   onChangeWorkPicker = (id, newValue) => {
     this.props.timePickerActions.changeTime(id, newValue);
     if (!this.props.tomato.started) {
-      this.props.tomatoActions.updateTomatoTimeString(newValue)
+      setTimeout(this.initTomato.bind(this))
     }
   }
 
@@ -95,8 +109,7 @@ class App extends Component {
   render() {
     const { workPicker, breakPicker } = this.props.timePickers;
     const { changeTime } = this.props.timePickerActions;
-    const { startTomato, updateTomato, updateTomatoTimeString } = this.props.tomatoActions;
-    const { started, time, timeString, currentTimeInfoLabel, passedTime } = this.props.tomato;
+    const { currentColor, timerTime, started, time, passedTime } = this.props.tomato;
 
     return (
       <div className="app">
@@ -108,9 +121,9 @@ class App extends Component {
         <Tomato
           passedTime={passedTime}
           started={started}
-          label={currentTimeInfoLabel}
+          timerTime={timerTime}
+          color={currentColor}
           time={time}
-          timeString={timeString}
           updateTomato={this.onUpdateTomato.bind(this)} />
       </div>
     );
