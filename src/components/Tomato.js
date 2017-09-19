@@ -12,10 +12,13 @@ class Tomato extends Component {
       scene: null
     }
 
-    setTimeout(this.createTomatoCanvas.bind(this), 0);
+  }
+
+  componentDidMount() {
+    this.createTomatoCanvas();
 
     if (this.props.started) {
-      setTimeout(this.startTimer.bind(this), 0)
+      this.startTimer();
     }
   }
 

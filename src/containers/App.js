@@ -125,6 +125,7 @@ class App extends Component {
           color={currentColor}
           time={time}
           updateTomato={this.onUpdateTomato.bind(this)} />
+        <a href="https://github.com/Tankerxyz/pomodoro-clock" target="_blank">github</a>
       </div>
     );
   }
